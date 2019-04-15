@@ -88,7 +88,7 @@ bot.on('message', message => {
     vote.votes[message.content.split(" ")[2] - 1] += 1;
 
     var totalVotes = new Number();
-    var winner = votes[voteIndex].options[0];
+    var winner = vote.options[0];
     var winnerVotes = new Number();
 
     for (var i = 0; i < vote.votes.length; i++) {
