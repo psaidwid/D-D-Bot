@@ -111,7 +111,7 @@ bot.on('message', message => {
       message.channel.send('The current stats are \n')
       var stats = '```';
       for (var i = 0; i < vote.options.length; i++)
-        stats += vote.options[i] + ': ' + vote.votes[i];
+        stats += vote.options[i] + ': ' + vote.votes[i] + '\n';
       stats += '```';
       message.channel.send(stats);
     }
