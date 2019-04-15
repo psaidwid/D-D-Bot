@@ -85,6 +85,8 @@ bot.on('message', message => {
       }
 		}
 
+    console.log(vote);
+
     vote.votes[message.content.split(" ")[2] - 1] += 1;
 
     var totalVotes = new Number();
@@ -113,6 +115,7 @@ bot.on('message', message => {
 		{
 			votes.splice(voteIndex, 1);
 		}
+
 		console.log(votes);
 	}
 });
