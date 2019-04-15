@@ -52,7 +52,7 @@ bot.on('message', message => {
 		message.channel.send('Sorry this isn\'t ready yet');
 	}
 
-	if (message.content.startsWith(prefix + 'sv')) {
+	if (message.content.startsWith(prefix + 'sv') && message.content.split(" ") > 5) {
 
 		var messageContent = message.content.split(" ");
 		var newVote = new Vote(messageContent[1]);
@@ -74,12 +74,16 @@ bot.on('message', message => {
 		votes.push(newVote);
 		//console.log(votes);
 	}
+  else if (message.content.startsWith(prefix + 'sv')) {
+    message.channel.send('Sorry, too few arguments');
+    message.channel.send('You can start a vote by doing something like ```' + prefix + 'sv direction 3 north south east west```');
+  }
 
   if (message.content.startsWith(prefix + 'log')) {
     console.log(votes);
   }
 
-	if (message.content.startsWith(prefix + 'vote') && message.content.split(" ") > 5) {
+	if (message.content.startsWith(prefix + 'vote') && message.content.split(" ") > 3) {
 		var voteEnd = false;
 		var voteName = new String();
     var vote = new Array();
@@ -123,8 +127,9 @@ bot.on('message', message => {
 
 		console.log(votes);
 	}
-  else if (message.content.startsWith(prefix + 'vote') {
+  else if (message.content.startsWith(prefix + 'vote')) {
     message.channel.send('Sorry, too few arguments');
+    message.channel.send('You can vote by doing something like ```' + prefix + 'vote direction 2```');
   }
 });
 
