@@ -75,6 +75,10 @@ bot.on('message', message => {
 		//console.log(votes);
 	}
 
+  if (message.content.startsWith(prefix + 'log')) {
+    console.log(votes);
+  }
+
 	if (message.content.startsWith(prefix + 'vote')) {
 		var voteEnd = false;
 		var voteName = new String();
@@ -84,8 +88,6 @@ bot.on('message', message => {
         vote = votes[voteIndex];
       }
 		}
-
-    console.log(vote);
 
     vote.votes[message.content.split(" ")[2] - 1] += 1;
 
@@ -107,8 +109,10 @@ bot.on('message', message => {
     }
     else {
       message.channel.send('The current stats are \n')
+      message.channel.send('```');
       for (var i = 0; i < vote.options.length; i++)
-        message.channel.send('```' + vote.options[i] + ': ' + vote.votes[i] + '```')
+        message.channel.send(vote.options[i] + ': ' + vote.votes[i]);
+      message.channel.send('```');
     }
 
 		if (voteEnd)
