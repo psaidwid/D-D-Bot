@@ -79,7 +79,7 @@ bot.on('message', message => {
     console.log(votes);
   }
 
-	if (message.content.startsWith(prefix + 'vote')) {
+	if (message.content.startsWith(prefix + 'vote') && message.content.split(" ") > 5) {
 		var voteEnd = false;
 		var voteName = new String();
     var vote = new Array();
@@ -123,6 +123,9 @@ bot.on('message', message => {
 
 		console.log(votes);
 	}
+  else if (message.content.startsWith(prefix + 'vote') {
+    message.channel.send('Sorry, too few arguments');
+  }
 });
 
 
