@@ -78,33 +78,37 @@ bot.on('message', message => {
 	if (message.content.startsWith(prefix + 'vote')) {
 		var voteEnd = false;
 		var voteName = new String();
+    var vote = new Array();
 		for (var voteIndex = 0; voteIndex < votes.length; voteIndex++) {
-  			if (votes[voteIndex].name = message.content.split(" ")[1]) {
-  				votes[voteIndex].votes[message.content.split(" ")[2] - 1] += 1;
-
-  				var totalVotes = new Number();
-  				var winner = votes[voteIndex].options[0];
-  				var winnerVotes = new Number();
-
-  				for (var i = 0; i < votes[voteIndex].votes.length; i++) {
-  					totalVotes += votes[voteIndex].votes[i];
-  					if (votes[voteIndex].votes[i] > winnerVotes)
-  						winner = votes[voteIndex].options[i];
-  				}
-
-  				if (totalVotes == votes[voteIndex].voters)
-  				{
-  					voteEnd = true;
-  					voteName = votes[voteIndex].name;
-  					message.channel.send('The vote \'' + votes[voteIndex].name + '\' has ended and the winner is ' + winner);
-  				}
-  				else {
-  					message.channel.send('The current stats are \n')
-  					for (var i = 0; i < votes[voteIndex].options.length; i++)
-  						message.channel.send('```' + votes[voteIndex].options[i] + ': ' + votes[voteIndex].votes[i] + '```')
-  				}
-  			}
+      if (votes[voteIndex].name = message.content.split(" ")[1]) {
+        vote = votes[voteIndex];
+      }
 		}
+
+    vote.votes[message.content.split(" ")[2] - 1] += 1;
+
+    var totalVotes = new Number();
+    var winner = votes[voteIndex].options[0];
+    var winnerVotes = new Number();
+
+    for (var i = 0; i < vote.votes.length; i++) {
+      totalVotes += vote.votes[i];
+      if (vote.votes[i] > winnerVotes)
+        winner = vote.options[i];
+    }
+
+    if (totalVotes == vote.voters)
+    {
+      voteEnd = true;
+      voteName = vote.name;
+      message.channel.send('The vote \'' + vote.name + '\' has ended and the winner is ' + winner);
+    }
+    else {
+      message.channel.send('The current stats are \n')
+      for (var i = 0; i < vote.options.length; i++)
+        message.channel.send('```' + vote.options[i] + ': ' + vote.votes[i] + '```')
+    }
+
 		if (voteEnd)
 		{
 			votes.splice(voteIndex, 1);
