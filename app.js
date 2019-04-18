@@ -5,8 +5,8 @@ const settings = require('./settings.json');
 const prefix = '&';
 const admin = '155139566842413056';
 
-var dndPlayers = new Array();
-var polls = new Array();
+var Players = new Array();
+var Polls = new Array();
 
 bot.on('ready',() => {
 	console.log('D&D Bot Online');
@@ -35,12 +35,50 @@ bot.on('message', message => {
 		console.log(message.author.username + messageString + dice);
 	}
 
+	if (message.content.startsWith(prefix + 'list') && (message.content.split(" ").length == 2)) {
+		if (message.content.split(" ")[1] == 'polls')
+		{
+			for (poll of Polls)
+				message.channel.send(poll.name);
+		}
+
+		if (message.content.split(" ")[1] == 'players')
+		{
+			for (player of Players)
+			{
+				message.channel.send(player.name + ' is <@' + player.id + '>');
+			}
+		}
+
+		if (message.content.split(" ")[1] == 'initiatives')
+		{
+			for (player of Players)
+			{
+				message.channel.send(player.name + ' has an initiative of ' + player.initiative);
+			}
+		}
+	}
+	else if (message.content.startsWith(prefix + 'list')) {
+		console.log(message.content.split(" "));
+    message.channel.send('Sorry, wrong arguments, use ```&list object_name``` to start a poll');
+	}
+
 	if (message.content.startsWith(prefix + 'setname') && (message.content.split(" ").length > 1)) {
     setCharacterName(message.author.id, message.content.split(" ")[1]);
-    console.log(message.author.username + ' set their character name to ' + message.content.split(" ")[1]);
+    console.log(message.author.username + ' set their character name to ' + getCharacterName(message.author.id));
     message.channel.send('Hello ' + getCharacterName(message.author.id));
 	}
   else if (message.content.startsWith(prefix + 'setname')) {
+    console.log(message.content.split(" "));
+    message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
+  }
+
+	if (message.content.startsWith(prefix + 'setinitiative') && (message.content.split(" ").length == 2)) {
+    setCharacterInitiative(message.author.id, message.content.split(" ")[1]);
+    console.log(message.author.username + ' set their initiative to ' + getCharacterInitiative(message.author.id));
+    message.channel.send('Initiative set to ' + getCharacterInitiative(message.author.id));
+	}
+  else if (message.content.startsWith(prefix + 'setinitiative')) {
     console.log(message.content.split(" "));
     message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
   }
@@ -79,7 +117,7 @@ bot.on('message', message => {
 
 		newPoll = new Poll(message.content.split(" ")[1], newVoters, newOptions, numVotes);
 
-		polls.push(newPoll);
+		Polls.push(newPoll);
     console.log(newPoll);
 
 		message.channel.send('A new poll \'' + newPoll.name + '\' has been created.\nHere are the options');
@@ -88,12 +126,6 @@ bot.on('message', message => {
 			message.channel.send(voteNum + ') ' + option);
 			voteNum++;
 		}
-
-		for (player of newPoll.voters)
-		{
-			//message.channel.send('<@' + player + '>');
-		}
-
 	}
   else if (message.content.startsWith(prefix + 'spoll')) {
   	console.log(message.content.split(" "));
@@ -103,13 +135,13 @@ bot.on('message', message => {
 	if (message.content.startsWith(prefix + 'vote') && (message.content.split(" ").length == 3)) {
 
 		pollIndex = 0;
-		for (i = 0; i < polls.length; i++) {
-			if (polls[i].name == message.content.split(" ")[1]) {
+		for (i = 0; i < Polls.length; i++) {
+			if (Polls[i].name == message.content.split(" ")[1]) {
 				pollIndex = i;
 				break;
 			}
 		}
-		poll = polls[i];
+		poll = Polls[i];
 
 		for (i = 0; i < poll.voters.length; i++) {
 			if (poll.voters[i] == message.author.id) {
@@ -120,7 +152,7 @@ bot.on('message', message => {
 
 		poll.votes[message.content.split(" ")[2] - 1] += 1;
 
-		console.log(polls);
+		console.log(Polls);
 
 		if (poll.voters.length == 0)
 		{
@@ -137,9 +169,10 @@ bot.on('message', message => {
 bot.login(settings.token);
 
 class Player {
-	constructor(pID, pName) {
+	constructor(pID) {
     this.id = pID;
-		this.name = pName;
+		this.name = '';
+		this.initiative = 0;
 	}
 }
 
@@ -161,28 +194,59 @@ function sleep(milliseconds) {
   }
 }
 
-function getCharacterName(userID) {
-  charName = '';
-  for (i = 0; i < dndPlayers.length; i++)
+function getCharacterInitiative(userID) {
+  for (i = 0; i < Players.length; i++)
   {
-    if (dndPlayers[i].id == userID)
+    if (Players[i].id == userID)
     {
-      return dndPlayers[i].name;
+      return Players[i].initiative;
+    }
+  }
+  return '';
+}
+
+function setCharacterInitiative(userID, charInit) {
+  for (i = 0; i < Players.length; i++)
+  {
+    if (Players[i].id == userID)
+    {
+      Players[i].initiative = charInit;
+      return;
+    }
+  }
+
+	newChar = new Player(userID);
+	newChar.initiative = charInit;
+
+  Players.push(newChar);
+  return;
+}
+
+function getCharacterName(userID) {
+  for (i = 0; i < Players.length; i++)
+  {
+    if (Players[i].id == userID)
+    {
+      return Players[i].name;
     }
   }
   return '';
 }
 
 function setCharacterName(userID, charName) {
-  for (i = 0; i < dndPlayers.length; i++)
+  for (i = 0; i < Players.length; i++)
   {
-    if (dndPlayers[i].id == userID)
+    if (Players[i].id == userID)
     {
-      dndPlayers[i].name = charName;
+      Players[i].name = charName;
       return;
     }
   }
 
-  dndPlayers.push(new Player(userID, charName));
+	newChar = new Player(userID);
+	newChar.name = charName;
+
+  Players.push(newChar);
+
   return;
 }

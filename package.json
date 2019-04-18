@@ -1,7 +1,7 @@
 {
-  "name": "Flow Bot",
-  "version": "0.0.1",
-  "description": "Flow Gaming Discord Bot",
+  "name": "D&D Bot",
+  "version": "1.0.1",
+  "description": "Flow Gaming D&D Bot",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
