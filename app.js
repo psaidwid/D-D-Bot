@@ -152,8 +152,6 @@ bot.on('message', message => {
 
 		poll.votes[message.content.split(" ")[2] - 1] += 1;
 
-		console.log(Polls);
-
 		if (poll.voters.length == 0)
 		{
 			message.channel.send("Poll Finished");
