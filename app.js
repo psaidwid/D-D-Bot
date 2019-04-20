@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const PollManager = require('./pollmanager.js');
 const bot = new Discord.Client();
 const settings = require('./settings.json');
 const prefix = '&';
@@ -18,11 +17,6 @@ bot.on('message', message => {
 	if (message.author === bot.user)
 		return;
 
-	if (message.content.startsWith(prefix + 'ping')) {
-		console.log(message.author.username + ' : ping : ' + message.createdAt);
-		message.channel.send('pong');
-	}
-
 	if (message.content.startsWith(prefix + 'roll')) {
 		var dice = (Math.floor(Math.random() * Math.floor(message.content.split(" ")[1])) + 1);
 		var messageString = '';
@@ -36,26 +30,28 @@ bot.on('message', message => {
 	}
 
 	if (message.content.startsWith(prefix + 'list') && (message.content.split(" ").length == 2)) {
-		if (message.content.split(" ")[1] == 'polls')
-		{
-			for (poll of Polls)
-				message.channel.send(poll.name);
-		}
+		listCommand = message.content.split(" ")[1];
 
-		if (message.content.split(" ")[1] == 'players')
+		switch (listCommand)
 		{
-			for (player of Players)
-			{
-				message.channel.send(player.name + ' is <@' + player.id + '>');
-			}
-		}
+			case 'polls':
 
-		if (message.content.split(" ")[1] == 'initiatives')
-		{
-			for (player of Players)
-			{
-				message.channel.send(player.name + ' has an initiative of ' + player.initiative);
-			}
+				for (poll of Polls)
+					message.channel.send(poll.name);
+
+			 	break;
+			case 'players':
+
+				for (player of Players)
+					message.channel.send(player.name + ' is <@' + player.id + '>');
+
+ 			 	break;
+			case 'initiatives':
+
+				for (player of Players)
+					message.channel.send(player.name + ' has an initiative of ' + player.initiative);
+
+ 			 	break;
 		}
 	}
 	else if (message.content.startsWith(prefix + 'list')) {
@@ -92,8 +88,6 @@ bot.on('message', message => {
 	}
 
 	if (message.content.startsWith(prefix + 'spoll') && (message.content.split(" ").length > 3) && message.content.includes('[')  && message.content.includes(']')) {
-
-		//Poll(pName, pVoters, pOptions, pVotes)
 
 		newVoters = new Array();
 
