@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const settings = require('./settings.json');
 const prefix = '&';
-const admin = '155139566842413056';
 
 var Players = new Array();
 var Polls = new Array();
