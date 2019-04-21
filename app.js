@@ -19,6 +19,7 @@ bot.on('message', message => {
 	if (message.content.startsWith(prefix + 'roll')) {
 		var dice = (Math.floor(Math.random() * Math.floor(message.content.split(" ")[1])) + 1);
 		var messageString = '';
+
 		if (dice == 1 || dice == 20)
 			messageString = ' rolled a NATURAL ';
 		else
@@ -78,23 +79,18 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
   }
 
-	if (message.content.startsWith(prefix + 'getMembers')) {
-		for (var [snowflake, role] of message.mentions.roles) {
-			for (var [snowflake, member] of role.members) {
+	if (message.content.startsWith(prefix + 'getMembers'))
+		for (var [snowflake, role] of message.mentions.roles)
+			for (var [snowflake, member] of role.members)
 				message.channel.send('<@' + member.id + '>');
-			}
-		}
-	}
 
 	if (message.content.startsWith(prefix + 'spoll') && (message.content.split(" ").length > 3) && message.content.includes('[')  && message.content.includes(']')) {
 
 		newVoters = new Array();
 
-		for (var [snowflake, role] of message.mentions.roles) {
-			for (var [snowflake, member] of role.members) {
+		for (var [snowflake, role] of message.mentions.roles)
+			for (var [snowflake, member] of role.members)
 				newVoters.push(member.id);
-			}
-		}
 
 		optionsString = message.content.substring(message.content.indexOf('[') + 1, message.content.lastIndexOf(']')).replace(' ', '');
 		console.log(optionsString);
@@ -128,12 +124,12 @@ bot.on('message', message => {
 	if (message.content.startsWith(prefix + 'vote') && (message.content.split(" ").length == 3)) {
 
 		pollIndex = 0;
-		for (i = 0; i < Polls.length; i++) {
+		for (i = 0; i < Polls.length; i++)
 			if (Polls[i].name == message.content.split(" ")[1]) {
 				pollIndex = i;
 				break;
 			}
-		}
+
 		poll = Polls[i];
 
 		for (i = 0; i < poll.voters.length; i++) {
@@ -146,9 +142,8 @@ bot.on('message', message => {
 		poll.votes[message.content.split(" ")[2] - 1] += 1;
 
 		if (poll.voters.length == 0)
-		{
 			message.channel.send("Poll Finished");
-		}
+
 	}
   else if (message.content.startsWith(prefix + 'vote')) {
   	console.log(message.content.split(" "));
@@ -178,33 +173,25 @@ class Poll {
 
 function sleep(milliseconds) {
   var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
+  for (var i = 0; i < 1e7; i++)
+    if ((new Date().getTime() - start) > milliseconds)
       break;
-    }
-  }
 }
 
 function getCharacterInitiative(userID) {
   for (i = 0; i < Players.length; i++)
-  {
     if (Players[i].id == userID)
-    {
       return Players[i].initiative;
-    }
-  }
+
   return '';
 }
 
 function setCharacterInitiative(userID, charInit) {
   for (i = 0; i < Players.length; i++)
-  {
-    if (Players[i].id == userID)
-    {
+    if (Players[i].id == userID) {
       Players[i].initiative = charInit;
       return;
     }
-  }
 
 	newChar = new Player(userID);
 	newChar.initiative = charInit;
@@ -215,24 +202,18 @@ function setCharacterInitiative(userID, charInit) {
 
 function getCharacterName(userID) {
   for (i = 0; i < Players.length; i++)
-  {
     if (Players[i].id == userID)
-    {
       return Players[i].name;
-    }
-  }
+
   return '';
 }
 
 function setCharacterName(userID, charName) {
   for (i = 0; i < Players.length; i++)
-  {
-    if (Players[i].id == userID)
-    {
+    if (Players[i].id == userID) {
       Players[i].name = charName;
       return;
     }
-  }
 
 	newChar = new Player(userID);
 	newChar.name = charName;
