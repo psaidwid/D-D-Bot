@@ -10,3 +10,4 @@
   * setinitiative - set a players initiative
   * spoll - start a poll
   * vote - vote on a polls
+  * dmvote - start a vote to set the dm

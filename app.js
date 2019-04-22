@@ -3,6 +3,7 @@ const bot = new Discord.Client();
 const settings = require('./settings.json');
 const prefix = '&';
 
+var DM = 0;
 var Players = new Array();
 var Polls = new Array();
 
@@ -79,6 +80,15 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
   }
 
+	if (message.content.startsWith(prefix + 'test')) {
+		if (message.author.id == DM) {
+			message.channel.send("Hello DM");
+		}
+		else {
+			message.channel.send("You are not the chosen one");
+		}
+	}
+
 	if (message.content.startsWith(prefix + 'getMembers'))
 		for (var [snowflake, role] of message.mentions.roles)
 			for (var [snowflake, member] of role.members)
@@ -142,13 +152,65 @@ bot.on('message', message => {
 		poll.votes[message.content.split(" ")[2] - 1] += 1;
 
 		if (poll.voters.length == 0)
-			message.channel.send("Poll Finished");
+		{
+			pollWinner = 0;
+			pollWinnerVotes = 0;
+
+			for (i = 0; i < poll.votes.length; i++)
+				if (poll.votes[i] > pollWinnerVotes)
+				{
+					pollWinnerVotes = poll.votes[i];
+					pollWinner = i;
+				}
+
+			message.channel.send(poll.name + " has finished Finished");
+			if (poll.name == 'DM') {
+				DM = poll.options[pollWinner];
+				console.log("DM set to " + DM);
+				message.channel.send("The new DM is <@" + DM + ">");
+			}
+			else
+				message.channel.send("The winner is " + poll.options[pollWinner]);
+		}
 
 	}
   else if (message.content.startsWith(prefix + 'vote')) {
   	console.log(message.content.split(" "));
     message.channel.send('Sorry, wrong arguments, use ```&vote vote_name option_name``` to start a poll');
   }
+
+	if (message.content.startsWith(prefix + 'dmvote') && (message.content.split(" ").length == 2)) {
+
+		newVoters = new Array();
+		newOptions = new Array();
+		numVotes = new Array();
+		numTotalVotes = 0;
+
+		for (var [snowflake, role] of message.mentions.roles)
+			for (var [snowflake, member] of role.members)
+			{
+				newOptions.push(member.id);
+				numVotes.push(0);
+				newVoters.push(member.id);
+			}
+
+		newPoll = new Poll("DM", newVoters, newOptions, numVotes);
+
+		Polls.push(newPoll);
+    console.log(newPoll);
+
+		message.channel.send('A new poll \'' + newPoll.name + '\' has been created.\nHere are the options');
+		voteNum = 1;
+		for (option of newPoll.options) {
+			message.channel.send(voteNum + ') <@' + option + '>');
+			voteNum++;
+		}
+	}
+  else if (message.content.startsWith(prefix + 'dmvote')) {
+  	console.log(message.content.split(" "));
+    message.channel.send('Sorry, wrong arguments, use ```&dmvote group_name``` to start a poll for the new DM');
+  }
+
 });
 
 
