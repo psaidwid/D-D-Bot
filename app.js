@@ -179,7 +179,7 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&vote vote_name option_name``` to start a poll');
   }
 
-	if (message.content.startsWith(prefix + 'dmvote') && (message.content.split(" ").length == 2)) {
+	if (message.content.startsWith(prefix + 'dmpoll') && (message.content.split(" ").length == 2)) {
 
 		newVoters = new Array();
 		newOptions = new Array();
@@ -206,9 +206,9 @@ bot.on('message', message => {
 			voteNum++;
 		}
 	}
-  else if (message.content.startsWith(prefix + 'dmvote')) {
+  else if (message.content.startsWith(prefix + 'dmpoll')) {
   	console.log(message.content.split(" "));
-    message.channel.send('Sorry, wrong arguments, use ```&dmvote group_name``` to start a poll for the new DM');
+    message.channel.send('Sorry, wrong arguments, use ```&dmpoll group_name``` to start a poll for the new DM');
   }
 
 });
