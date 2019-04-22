@@ -61,26 +61,46 @@ bot.on('message', message => {
 	}
 
 	if (message.content.startsWith(prefix + 'setname') && (message.content.split(" ").length > 1)) {
-    setCharacterName(message.author.id, message.content.split(" ")[1]);
-    console.log(message.author.username + ' set their character name to ' + getCharacterName(message.author.id));
-    message.channel.send('Hello ' + getCharacterName(message.author.id));
+		if (message.author.id == DM && message.content.split(" ").length > 2 && message.mentions.users.array().length > 0) {
+			for (var [snowflake, user] of message.mentions.users)
+			{
+				setCharacterName(snowflake, message.content.split(" ")[1]);
+		    console.log(message.author.username + ' set ' + user.username + '\'s character name to ' + getCharacterName(snowflake));
+				message.channel.send('The DM(<@' + message.author.id + '>) has set <@' + snowflake + '>\'s character name to ' + getCharacterName(snowflake));
+			}
+		}
+		else {
+			setCharacterName(message.author.id, message.content.split(" ")[1]);
+	    console.log(message.author.username + ' set their character name to ' + getCharacterName(message.author.id));
+	    message.channel.send('Hello ' + getCharacterName(message.author.id));
+		}
 	}
   else if (message.content.startsWith(prefix + 'setname')) {
     console.log(message.content.split(" "));
     message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
   }
 
-	if (message.content.startsWith(prefix + 'setinitiative') && (message.content.split(" ").length == 2)) {
-    setCharacterInitiative(message.author.id, message.content.split(" ")[1]);
-    console.log(message.author.username + ' set their initiative to ' + getCharacterInitiative(message.author.id));
-    message.channel.send('Initiative set to ' + getCharacterInitiative(message.author.id));
+	if (message.content.startsWith(prefix + 'setinitiative') && (message.content.split(" ").length > 1)) {
+		if (message.author.id == DM && message.content.split(" ").length > 2 && message.mentions.users.array().length > 0) {
+			for (var [snowflake, user] of message.mentions.users)
+			{
+				setCharacterInitiative(snowflake, message.content.split(" ")[1]);
+		    console.log(message.author.username + ' set ' + user.username + '\'s character name to ' + getCharacterInitiative(snowflake));
+				message.channel.send('The DM(<@' + message.author.id + '>) has set <@' + snowflake + '>\'s character name to ' + getCharacterInitiative(snowflake));
+			}
+		}
+		else {
+			setCharacterInitiative(message.author.id, message.content.split(" ")[1]);
+	    console.log(message.author.username + ' set their character name to ' + getCharacterInitiative(message.author.id));
+	    message.channel.send('Hello ' + getCharacterInitiative(message.author.id));
+		}
 	}
   else if (message.content.startsWith(prefix + 'setinitiative')) {
     console.log(message.content.split(" "));
-    message.channel.send('Sorry, wrong arguments, use ```&setname char_name``` to set your character name');
+    message.channel.send('Sorry, wrong arguments, use ```&setinitiative number``` to set your character name');
   }
 
-	if (message.content.startsWith(prefix + 'test')) {
+	if (message.content.startsWith(prefix + 'testDM')) {
 		if (message.author.id == DM) {
 			message.channel.send("Hello DM");
 		}
@@ -89,10 +109,11 @@ bot.on('message', message => {
 		}
 	}
 
-	if (message.content.startsWith(prefix + 'getMembers'))
+	if (message.content.startsWith(prefix + 'getMembers')) {
 		for (var [snowflake, role] of message.mentions.roles)
 			for (var [snowflake, member] of role.members)
 				message.channel.send('<@' + member.id + '>');
+	}
 
 	if (message.content.startsWith(prefix + 'spoll') && (message.content.split(" ").length > 3) && message.content.includes('[')  && message.content.includes(']')) {
 
