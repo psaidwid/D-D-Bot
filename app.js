@@ -100,21 +100,6 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&setinitiative number``` to set your character name');
   }
 
-	if (message.content.startsWith(prefix + 'testDM')) {
-		if (message.author.id == DM) {
-			message.channel.send("Hello DM");
-		}
-		else {
-			message.channel.send("You are not the chosen one");
-		}
-	}
-
-	if (message.content.startsWith(prefix + 'getMembers')) {
-		for (var [snowflake, role] of message.mentions.roles)
-			for (var [snowflake, member] of role.members)
-				message.channel.send('<@' + member.id + '>');
-	}
-
 	if (message.content.startsWith(prefix + 'spoll') && (message.content.split(" ").length > 3) && message.content.includes('[')  && message.content.includes(']')) {
 
 		newVoters = new Array();
