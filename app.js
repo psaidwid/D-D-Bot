@@ -60,6 +60,10 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&list object_name``` to start a poll');
 	}
 
+	if (message.content.startsWith(prefix + 'getCharacter')  && (message.content.split(" ").length == 2)) {
+		console.log(message.content.split(" "));
+	}
+
 	if (message.content.startsWith(prefix + 'setname') && (message.content.split(" ").length > 1)) {
 		if (message.author.id == DM && message.content.split(" ").length > 2 && message.mentions.users.array().length > 0) {
 			for (var [snowflake, user] of message.mentions.users)
