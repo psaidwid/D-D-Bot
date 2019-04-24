@@ -1,5 +1,5 @@
 {
-  "name": "D&D Bot",
+  "name": "DND-Bot",
   "version": "1.0.1",
   "description": "Flow Gaming D&D Bot",
   "main": "app.js",
@@ -16,6 +16,7 @@
     "libsodium": "^0.7.4",
     "libsodium-wrappers": "^0.7.3",
     "opusscript": "0.0.6",
+    "request": "^2.88.0",
     "uws": "^9.148.0"
   }
 }
