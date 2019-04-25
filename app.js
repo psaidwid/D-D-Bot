@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Request = require('request');
 const bot = new Discord.Client();
 const settings = require('./settings.json');
 const prefix = '&';
@@ -61,7 +62,19 @@ bot.on('message', message => {
 	}
 
 	if (message.content.startsWith(prefix + 'getCharacter')  && (message.content.split(" ").length == 2)) {
-		console.log(message.content.split(" "));
+		Request('https://www.dndbeyond.com/profile/Psaidwid/characters/10992763', function (error, response, body) {
+	  	console.error('error:', error); // Print the error if one occurred
+	  	console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+	  	console.log('body:', body); // Print the HTML for the Google homepage.
+			const fs = require('fs');
+			fs.writeFile("requestInfo", body.substring(body.indexOf("")), function(err) {
+    		if(err) {
+        		return console.log(err);
+    		}
+
+    		console.log("The file was saved!");
+			});
+		});
 	}
 
 	if (message.content.startsWith(prefix + 'setname') && (message.content.split(" ").length > 1)) {
