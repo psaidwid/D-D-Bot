@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Request = require('request');
+const Axios = require('axios');
 const bot = new Discord.Client();
 const settings = require('./settings.json');
 const prefix = '&';
@@ -61,20 +61,23 @@ bot.on('message', message => {
     message.channel.send('Sorry, wrong arguments, use ```&list object_name``` to start a poll');
 	}
 
-	if (message.content.startsWith(prefix + 'getCharacter')  && (message.content.split(" ").length == 2)) {
-		Request('https://www.dndbeyond.com/profile/Psaidwid/characters/10992763', function (error, response, body) {
-	  	console.error('error:', error); // Print the error if one occurred
-	  	console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-	  	console.log('body:', body); // Print the HTML for the Google homepage.
-			const fs = require('fs');
-			fs.writeFile("requestInfo", body.substring(body.indexOf("")), function(err) {
-    		if(err) {
-        		return console.log(err);
-    		}
+	if (message.content.startsWith(prefix + 'testChar')  && (message.content.split(" ").length == 1)) {
 
-    		console.log("The file was saved!");
-			});
-		});
+		Axios({
+    url: 'https://www.dndbeyond.com/profile/Psaidwid/characters/10992763/',
+    method: 'get',
+    headers: {
+			'accept-language': 'en-US,en;q=0.9',
+			'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36',
+    }
+ })
+ .then(response => {
+    //console.log(response);
+		console.log(response.data);
+ })
+ .catch(err => {
+    console.log(err);
+ });
 	}
 
 	if (message.content.startsWith(prefix + 'setname') && (message.content.split(" ").length > 1)) {
