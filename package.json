@@ -9,7 +9,7 @@
   "author": "Psaidwid",
   "license": "none",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bufferutil": "^3.0.4",
     "discord.js": "^11.3.2",
     "extend": "^3.0.2",
